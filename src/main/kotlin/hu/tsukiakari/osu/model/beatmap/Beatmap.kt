@@ -1,0 +1,35 @@
+package hu.tsukiakari.osu.model.beatmap
+
+import com.google.gson.annotations.SerializedName
+
+data class Beatmap(
+    @SerializedName("beatmapset_id")     val beatmapsetId: Int,
+    @SerializedName("difficulty_rating") val difficultyRating: Double,
+    val id: Int,
+    val mode: String,
+    val status: String,
+    @SerializedName("total_length")      val totalLength: Long,
+    @SerializedName("user_id")           val userId: Int,
+    val version: String,
+    val accuracy: Double,
+    val ar: Double,
+    val bpm: Double,
+    val convert: Boolean,
+    @SerializedName("count_circles")     val countCircles: Int,
+    @SerializedName("count_sliders")     val countSliders: Int,
+    @SerializedName("count_spinners")    val countSpinners: Int,
+    val cs: Double,
+    @SerializedName("deleted_at")        val deletedAt: String?,
+    val hp: Double,
+    @SerializedName("hit_length")        val hitLength: Int,
+    @SerializedName("is_scoreable")      val isScoreable: Boolean,
+    @SerializedName("last_updated")      val lastUpdated: String,
+    @SerializedName("mode_int")          val modeInt: Int,
+    val passcount: Int,
+    val playcount: Int,
+    val ranked: Int,
+    val url: String,
+    val beatmapset: BeatmapSet?,
+    val checksum: String?,
+    val max_combo: Int,
+)
