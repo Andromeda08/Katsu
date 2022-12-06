@@ -11,7 +11,6 @@ import hu.tsukiakari.osu.model.ranking.UserEntry
 import hu.tsukiakari.osu.model.score.Score
 import hu.tsukiakari.osu.model.user.User
 import io.ktor.util.*
-import jdk.jshell.execution.Util
 import java.text.NumberFormat
 import kotlin.math.roundToInt
 
