@@ -83,9 +83,11 @@ object Format {
                 cell("Play count")
                 cell(user.statistics.playCount) { alignment = TextAlignment.MiddleCenter }
             }
-            row {
-                cell("Plays with:")
-                cell(user.playstyle.toString().subSequence(1, user.playstyle.toString().length - 1)) { columnSpan = 4 }
+            if (user.playstyle != null) {
+                row {
+                    cell("Plays with:")
+                    cell(user.playstyle.toString().subSequence(1, user.playstyle.toString().length - 1)) { columnSpan = 4 }
+                }
             }
             row {
                 val ymd = Utility.convertToYMD(user.joinDate)
