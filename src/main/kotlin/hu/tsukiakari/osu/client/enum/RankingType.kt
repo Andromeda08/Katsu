@@ -6,3 +6,10 @@ enum class RankingType(val str: String, val url: String) {
     PERFORMANCE("Performance", "performance"),
     SCORE("Score", "score")
 }
+
+fun strToRankingType(str: String): RankingType = when (str) {
+    RankingType.COUNTRY.str -> RankingType.COUNTRY
+    RankingType.PERFORMANCE.str -> RankingType.PERFORMANCE
+    RankingType.SCORE.str -> RankingType.SCORE
+    else -> throw IllegalArgumentException("Unknown ranking type: \" $str \"")
+}

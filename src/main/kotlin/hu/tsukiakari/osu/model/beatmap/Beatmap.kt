@@ -20,7 +20,7 @@ data class Beatmap(
     @SerializedName("count_spinners")    val countSpinners: Int,
     val cs: Double,
     @SerializedName("deleted_at")        val deletedAt: String?,
-    val hp: Double,
+    val drain: Double,
     @SerializedName("hit_length")        val hitLength: Int,
     @SerializedName("is_scoreable")      val isScoreable: Boolean,
     @SerializedName("last_updated")      val lastUpdated: String,

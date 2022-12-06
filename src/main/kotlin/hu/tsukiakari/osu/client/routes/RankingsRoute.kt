@@ -17,10 +17,10 @@ class RankingsRoute(private val client: HttpClient) {
      */
     suspend fun getPerformanceRankings(
         mode: PlayMode = PlayMode.OSU,
-        variant: ManiaVariant = ManiaVariant.FOUR
+        variant: ManiaVariant?
     ): Ranking<UserEntry> =
         client.get("rankings/${mode.url}/performance") {
-            if (mode == PlayMode.MANIA) parameter("variant", variant.str)
+            if (mode == PlayMode.MANIA) parameter("variant", variant?.str ?: ManiaVariant.FOUR.str)
         }.body()
 
     /**
@@ -30,10 +30,10 @@ class RankingsRoute(private val client: HttpClient) {
      */
     suspend fun getScoreRankings(
         mode: PlayMode = PlayMode.OSU,
-        variant: ManiaVariant = ManiaVariant.FOUR
+        variant: ManiaVariant?
     ): Ranking<UserEntry> =
         client.get("rankings/${mode.url}/score") {
-            if (mode == PlayMode.MANIA) parameter("variant", variant.str)
+            if (mode == PlayMode.MANIA) parameter("variant", variant?.str ?: ManiaVariant.FOUR.str)
         }.body()
 
     /**
@@ -43,9 +43,9 @@ class RankingsRoute(private val client: HttpClient) {
      */
     suspend fun getCountryRankings(
         mode: PlayMode = PlayMode.OSU,
-        variant: ManiaVariant = ManiaVariant.FOUR
+        variant: ManiaVariant?
     ): Ranking<CountryEntry> =
         client.get("rankings/${mode.url}/country") {
-            if (mode == PlayMode.MANIA) parameter("variant", variant.str)
+            if (mode == PlayMode.MANIA) parameter("variant", variant?.str ?: ManiaVariant.FOUR.str)
         }.body()
 }

@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.20"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "hu.tsukiakari"
@@ -14,6 +15,7 @@ repositories {
 
 val ktorVersion: String by project
 val inquirerVersion: String by project
+val picnicVersion: String by project
 dependencies {
     testImplementation(kotlin("test"))
 
@@ -23,6 +25,20 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-gson:$ktorVersion")
     implementation("com.github.kotlin-inquirer:kotlin-inquirer:$inquirerVersion")
+    implementation("com.jakewharton.picnic:picnic:$picnicVersion")
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "hu.tsukiakari.app.ApplicationKt"
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.main.get().output)
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }
 
 tasks.test {

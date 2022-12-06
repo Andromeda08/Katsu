@@ -62,5 +62,7 @@ data class User(
     @SerializedName("support_level")                val supportLevel: Int,
     @SerializedName("user_achievements")            val userAchievements: List<Achievement>,
     @SerializedName("unranked_beatmapset_count")    val unrankedBeatmapsetCount: Int,
-    @SerializedName("ranked_and_approved_beatmapset_count") val rankedAndApprovedBeatmapsetCount: Int
+    @SerializedName("ranked_and_approved_beatmapset_count") val rankedAndApprovedBeatmapsetCount: Int,
+
+    val error: String?,
 )

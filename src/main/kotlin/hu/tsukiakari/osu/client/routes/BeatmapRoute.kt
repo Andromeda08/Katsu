@@ -3,7 +3,8 @@ package hu.tsukiakari.osu.client.routes
 import hu.tsukiakari.osu.client.enum.PlayMode
 import hu.tsukiakari.osu.model.beatmap.Beatmap
 import hu.tsukiakari.osu.model.beatmap.attributes.BeatmapAttributes
-import hu.tsukiakari.osu.model.score.Score
+import hu.tsukiakari.osu.model.response.BeatmapScoreResponse
+import hu.tsukiakari.osu.model.response.BeatmapScoresResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -35,7 +36,7 @@ class BeatmapRoute(private val client: HttpClient) {
      * @return BeatmapAttributes object
      */
     suspend fun getBeatmapAttributes(beatmapId: Int, ruleset: PlayMode = PlayMode.OSU): BeatmapAttributes =
-        client.get("beatmaps/$beatmapId/attributes") {
+        client.post("beatmaps/$beatmapId/attributes") {
             parameter("ruleset", ruleset.url)
         }.body()
 
@@ -43,9 +44,9 @@ class BeatmapRoute(private val client: HttpClient) {
      * Lookup scores for a certain beatmap
      * @param beatmapId beatmap id
      * @param mode osu! playmode
-     * @return List of Score objects
+     * @return BeatmapScoresResponse object
      */
-    suspend fun getBeatmapScores(beatmapId: Int, mode: PlayMode = PlayMode.OSU): List<Score> =
+    suspend fun getBeatmapScores(beatmapId: Int, mode: PlayMode = PlayMode.OSU): BeatmapScoresResponse =
         client.get("beatmaps/$beatmapId/scores") {
             parameter("mode", mode.url)
         }.body()
@@ -55,9 +56,9 @@ class BeatmapRoute(private val client: HttpClient) {
      * @param beatmapId id of the beatmap
      * @param userId osu! user id
      * @param mode osu! playmode
-     * @return Score object
+     * @return BeatmapScoreResponse object
      */
-    suspend fun getUserScoreOnBeatmap(beatmapId: Int, userId: Int, mode: PlayMode = PlayMode.OSU): Score =
+    suspend fun getUserScoreOnBeatmap(beatmapId: Int, userId: Int, mode: PlayMode = PlayMode.OSU): BeatmapScoreResponse =
         client.get("beatmaps/$beatmapId/scores/users/$userId") {
             parameter("mode", mode.url)
         }.body()
@@ -67,9 +68,9 @@ class BeatmapRoute(private val client: HttpClient) {
      * @param beatmapId id of the beatmap
      * @param userId osu! user id
      * @param mode osu! playmode
-     * @return Score object
+     * @return BeatmapScoresResponse object
      */
-    suspend fun getAllUserScoresOnBeatmap(beatmapId: Int, userId: Int, mode: PlayMode = PlayMode.OSU): Score =
+    suspend fun getAllUserScoresOnBeatmap(beatmapId: Int, userId: Int, mode: PlayMode = PlayMode.OSU): BeatmapScoresResponse =
         client.get("beatmaps/$beatmapId/scores/users/$userId/all") {
             parameter("mode", mode.url)
         }.body()
