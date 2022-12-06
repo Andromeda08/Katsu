@@ -27,7 +27,7 @@ data class User(
     @SerializedName("max_friends")      val maxFriends: Int,
     val occupation: String?,
     val playmode: String,
-    val playstyle: List<String>,
+    val playstyle: List<String>?,
     @SerializedName("post_count")       val postCount: Int,
     @SerializedName("profile_order")    val profileOrder: List<String>,
     val title: String?,
