@@ -96,22 +96,25 @@ object Format {
         }.toString()
     }
 
-    fun formatScoreCompact(score: Score, beatmapSet: BeatmapSet, beatmap: Beatmap): String {
-        return "(${score.rank.toUpperCasePreservingASCIIRules()})" +
-                " ${Utility.ellipsis(beatmapSet.artist)} - ${Utility.ellipsis(beatmapSet.title)} [${beatmap.version}]" +
-                " ${Utility.formatAccuracy(score.accuracy * 100)} for ${score.pp.roundToInt()}pp"
-    }
 
-    fun formatUserScores(type: ScoreType, mode: PlayMode, scores: List<Score>, username: String) =
+    fun formatUserScores(type: ScoreType?, mode: PlayMode, scores: List<Score>, username: String, beatmap: Beatmap?) =
         table {
             cellStyle {
                 border = true
             }
             header {
                 row {
-                    cell("${type.str} scores of $username in ${mode.str}") { columnSpan = 7 }
+                    if (type != null) {
+                        cell("${type.str} scores of $username in ${mode.str}") { columnSpan = 7 }
+                    }
+                    if (beatmap != null) {
+                        cell("Scores of $username on ${Utility.ellipsis(beatmap.beatmapset!!.artist)} - ${Utility.ellipsis(beatmap.beatmapset.title)} [${beatmap.version}]") {
+                            columnSpan = 7
+                        }
+                    }
                 }
-                row ("#", "Rank", "Song", "Difficulty", "Mods", "Accuracy", "pp")
+
+                row("#", "Rank", "Song", "Difficulty", "Mods", "Accuracy", "pp")
                 scores.forEachIndexed { index, score ->
                     row {
                         cellStyle {
@@ -120,8 +123,14 @@ object Format {
                         }
                         cell("#${index + 1}")
                         cell(score.rank.toUpperCasePreservingASCIIRules()) { alignment = TextAlignment.MiddleCenter }
-                        cell("${Utility.ellipsis(score.beatmapset!!.artist)} - ${score.beatmapset.title}")
-                        cell(score.beatmap!!.version)
+                        if (type != null) {
+                            cell("${Utility.ellipsis(score.beatmapset!!.artist)} - ${score.beatmapset.title}")
+                            cell(score.beatmap!!.version)
+                        }
+                        if (beatmap != null) {
+                            cell("${Utility.ellipsis(beatmap.beatmapset!!.artist)} - ${Utility.ellipsis(beatmap.beatmapset.title)}")
+                            cell(beatmap.version)
+                        }
                         cell(score.mods.toString().subSequence(1, score.mods.toString().length - 1))
                         cell(Utility.formatAccuracy(score.accuracy * 100)) { alignment = TextAlignment.MiddleCenter }
                         cell("${score.pp.roundToInt()}pp")
@@ -138,12 +147,43 @@ object Format {
                 cell(score.rank.toUpperCasePreservingASCIIRules())
                 cell("${beatmapSet.artist} - ${beatmapSet.title}")
                 cell(beatmap.version)
-                cell(score.mods.toString())
+                if (score.mods.isNotEmpty()) {
+                    cell(score.mods.toString().subSequence(1, score.mods.toString().length - 1))
+                }
                 cell(Utility.formatAccuracy(score.accuracy * 100))
                 cell("${score.pp.roundToInt()}pp")
             }
         }.toString()
     }
+
+    fun formatBeatmapScores(scores: List<Score>, beatmap: Beatmap, mode: PlayMode) =
+        table {
+            cellStyle {
+                border = true
+            }
+            header {
+                row {
+                    cell("Top scores on ${Utility.ellipsis(beatmap.beatmapset!!.artist)} - ${Utility.ellipsis(beatmap.beatmapset.title)} [${beatmap.version}] for ${mode.str}") {
+                        columnSpan = 6
+                    }
+                }
+            }
+            row ("#", "Player", "Rank", "Mods", "Accuracy", "pp")
+            scores.forEachIndexed { index, score ->
+                row {
+                    cellStyle {
+                        borderTop = false
+                        borderBottom = (index == scores.size - 1)
+                    }
+                    cell("#${index + 1}")
+                    cell(score.user!!.username)
+                    cell(score.rank.toUpperCasePreservingASCIIRules()) { alignment = TextAlignment.MiddleCenter }
+                    cell(score.mods.toString().subSequence(1, score.mods.toString().length - 1))
+                    cell(Utility.formatAccuracy(score.accuracy * 100)) { alignment = TextAlignment.MiddleCenter }
+                    cell("${score.pp.roundToInt()}pp")
+                }
+            }
+        }.toString()
 
     fun formatUserPerformanceRanking(users: List<UserEntry>, mode: PlayMode) =
         table {

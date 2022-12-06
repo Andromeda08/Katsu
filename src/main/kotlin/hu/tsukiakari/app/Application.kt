@@ -11,7 +11,7 @@ const val gClientSecret: String = ""
 
 class Application {
     private val client: Client = Client(gClientId, gClientSecret)
-    private var shouldExit: Boolean = false;
+    private var shouldExit: Boolean = false
 
     private val messages: Messages = Messages()
 
@@ -88,7 +88,7 @@ class Application {
             val user = client.users.getUser(username, playMode)
             try {
                 val scores = client.users.getUserScores(user.id, playMode, scoreType)
-                println(Format.formatUserScores(scoreType, playMode, scores, user.username))
+                println(Format.formatUserScores(scoreType, playMode, scores, user.username, null))
             }
             catch (e: Exception) {
                 println(messages.error.userNotFound)
@@ -112,9 +112,7 @@ class Application {
                         val mode = promptForPlayMode()
                         val beatmap = client.beatmaps.getBeatmap(beatmapId)
                         val response = client.beatmaps.getBeatmapScores(beatmapId, mode)
-                        response.scores.forEachIndexed { index, score ->
-                            println("[${index + 1}] ${Format.formatScoreCompact(score, beatmap.beatmapset!!, beatmap)}")
-                        }
+                        println(Format.formatBeatmapScores(response.scores, beatmap, mode))
                     }
                     beatmapOptions[3] -> {
                         val username: String = KInquirer.promptInput(messages.user.promptName)
@@ -152,10 +150,7 @@ class Application {
                         }
                         else {
                             val beatmap = client.beatmaps.getBeatmap(beatmapId)
-
-                            response.scores.forEachIndexed { index, score ->
-                                println("[${index + 1}] ${Format.formatScoreCompact(score, beatmap.beatmapset!!, beatmap)}")
-                            }
+                            println(Format.formatUserScores(null, mode, response.scores, user.username, beatmap))
                         }
                     }
                 }
